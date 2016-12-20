@@ -17,5 +17,5 @@ In the
     ## <a name="youranchor"></a>  Your Contribution
 
 
-## Contibutions
+## Contributions
 
