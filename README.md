@@ -5,7 +5,7 @@ This repository is meant to hold small code examples / snippets that are interes
 
 ## Contibuting
 
-To contibute, please fork this repo, craete a new branch and commit your snippets / code to that branch. The structure is meant to be light-weight, just create a new apprpriately named directory. If you want you can add your contributions to this README with a short 
+To contibute, please fork this repo, craete a new branch and commit your snippets / code to that branch. The structure is meant to be light-weight, just create a new apprpriately named directory (preferably with its own README). If you want you can add your contributions to this README with a short 
 description. 
 
 In the TOC add 
