@@ -61,14 +61,18 @@
           }
 
           // nodes.clear();
-          nodes.update(_.map(node_data ,function(x){
-            return {id: x.id, label: x.name, color: state_color[x.state]}
-          }));
 
-          // edges.clear();
-          edges.update(_.map(edge_data ,function(x,index){
+
+          var now_nodes = _.map(node_data ,function(x){
+            return {id: x.id, label: x.name, color: state_color[x.state], shape: 'box'}
+          })
+          nodes.update(now_nodes);
+
+          var now_edges = _.map(edge_data ,function(x,index){
             return {id: index, from: x[0], to: x[1]}
-          }));
+          })
+          edges.update(now_edges);
+
         }
 
         $(document).ready(function(){
@@ -88,8 +92,18 @@
                 $('#log').append('<br>Received: ' + JSON.stringify(msg.data));
             });
 
+            socket.on('yadage_ctrl', function(msg){
+              console.log('control..')
+              if (msg.data == 'clear') {
+                console.log('clear')
+                $('#mynetwork').html('')
+                initialize_graph();
+              }
+            })
+
             socket.on('yadage_state', function(msg){
               update_graph(msg.data.dag.nodes, msg.data.dag.edges)
+              $('#timestamp').html(Date())
             })
 
             socket.emit('frontendmessage', {data: 'Echo This!'});
@@ -97,16 +111,25 @@
     </script>
 
     <style type="text/css">
+        body {
+          font-family: Helvetica, Arial, Sans-Serif;
+        }
         #mynetwork {
-            margin: auto;
-            width: 70%;
-            height: 100px;
-            min-height: 500px;
-            /*border: 1px solid black;*/
+          margin: auto;
+          width: 70%;
+          height: 100px;
+          min-height: 500px;
+          /*border: 1px solid black;*/
+        }
+        #timestamp {
+          margin: auto;
+          width: 70%;
+          text-align: center;          
         }
     </style>
 </head>
 <body>
   <div id="mynetwork"></div>
+  <div id="timestamp"></div>
 </body>
 </html>

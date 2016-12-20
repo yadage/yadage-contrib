@@ -15,12 +15,14 @@ app.config['SECRET_KEY'] = 'secret!'
 def background_thread():
     """Example of how to send server generated events to clients."""
     socket = ctx.socket(zmq.SUB)
-    socket.connect('ipc://work/_yadage/what.sock')
+    socket.connect('ipc://../what.sock')
     socket.setsockopt_string(zmq.SUBSCRIBE,u'')
     while True:
-        print 'wait for message'
         msg = socket.recv_json()
-        sio.emit('yadage_state', {'data': msg}, namespace='/test')
+        if 'yadage_ctrl' in msg:
+            sio.emit('yadage_ctrl', {'data': msg['yadage_ctrl']}, namespace='/test')    
+        elif 'yadage_obj' in msg:
+            sio.emit('yadage_state', {'data': msg['yadage_obj']}, namespace='/test')
 
 @app.route('/')
 def index():
