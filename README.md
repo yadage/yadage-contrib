@@ -21,4 +21,11 @@ In the
 
 ## Contributions
 
+* [First](#zmq)
+
+
+### <a name="zmq"></a>  ZeroMQ Tracker and socket.io server
+
+	A track that publishes onto a ZeroMQ socket and a small Flask-based server that subscribes to messages and updates a javascript-based view using vis.js
+
 
