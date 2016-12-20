@@ -15,6 +15,8 @@ In the TOC add
 In the 
     
     ## <a name="youranchor"></a>  Your Contribution
+    
+    Short paragraph describing your contribution
 
 
 ## Contributions
