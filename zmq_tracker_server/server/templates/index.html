@@ -2,7 +2,8 @@
 <html>
 <head>
 
-
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  
     <script type="text/javascript" src="static/components/lodash/dist/lodash.js"></script>
     <script type="text/javascript" src="static/components/vis/dist/vis.js"></script>
 
@@ -61,52 +62,85 @@
           }
 
           // nodes.clear();
-          nodes.update(_.map(node_data ,function(x){
-            return {id: x.id, label: x.name, color: state_color[x.state]}
-          }));
 
-          // edges.clear();
-          edges.update(_.map(edge_data ,function(x,index){
-            return {id: index, from: x[0], to: x[1]}
-          }));
+
+          var now_nodes = _.map(node_data ,function(x){
+            return {id: x.id, label: x.name, color: state_color[x.state], shape: 'box'}
+          })
+          nodes.update(now_nodes);
+
+          var now_edges = _.map(edge_data ,function(x,index){
+            return {id: 'from_'+x[0]+'_to_'+x[1], from: x[0], to: x[1]}
+          })
+          edges.update(now_edges);
+
         }
-
+        socket_global = undefined
         $(document).ready(function(){
             initialize_graph();
 
             namespace = '/test';
             var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+            socket_global = socket;
 
-            socket.on('connect', function() {
-                socket.emit('frontendmessage', {data: 'I\'m connected!'});
-                $('#log').append('<br>Connected!');
-            });
-            socket.on('disconnect', function() {
-                $('#log').append('<br>Disconnected');
-            });
-            socket.on('servermessage', function(msg) {
-                $('#log').append('<br>Received: ' + JSON.stringify(msg.data));
-            });
-
-            socket.on('yadage_state', function(msg){
-              update_graph(msg.data.dag.nodes, msg.data.dag.edges)
+            socket.on('join_ack', function(msg){
+              console.log(msg)
             })
 
-            socket.emit('frontendmessage', {data: 'Echo This!'});
+            socket.on('yadage_ctrl', function(msg){
+              console.log('control..')
+              if (msg.data == 'clear') {
+                console.log('clear')
+                $('#mynetwork').html('')
+                initialize_graph();
+              }
+            })
+
+            socket.on('yadage_state', function(msg){
+              console.log('state...')
+              update_graph(msg.data.dag.nodes, msg.data.dag.edges)
+              $('#timestamp').html(Date())
+            })
+
+            socket.emit('join', {room: '{{room}}' });
+
+            socket.emit('roomit', {room: '{{room}}'});
+
         });
     </script>
 
     <style type="text/css">
         #mynetwork {
-            margin: auto;
-            width: 70%;
-            height: 100px;
-            min-height: 500px;
-            /*border: 1px solid black;*/
+          margin: auto;
+          width: 70%;
+          height: 100px;
+          min-height: 500px;
+          /*border: 1px solid black;*/
+        }
+        #timestamp {
+          margin: auto;
+          width: 70%;
+          text-align: center;          
+          font-family: Helvetica, Arial, Sans-Serif;
+        }
+        #badge{
+          /*float: left;*/
+          font-size: 200%;
+          color: #9150FF;
+          font-family: 'Press Start 2P';
+        }
+        #subbage{
+          /*float: left;*/
+          font-size: 200%;
+          font-family: 'Press Start 2P';
         }
     </style>
 </head>
 <body>
+  <div style="padding: 2em;">
+    <span id="badge">YadageMonitor:   </span>   <span id="subbage">{{room}}</span>
+  </div>
   <div id="mynetwork"></div>
+  <div id="timestamp"></div>
 </body>
 </html>
