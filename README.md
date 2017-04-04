@@ -22,10 +22,15 @@ In the
 ## Contributions
 
 * [ZeroMQ Tracker/Socket.IO Server](#zmq)
+* [shields.io markdown badges](#badges)
 
 
 ### <a name="zmq"></a>  ZeroMQ Tracker and socket.io server
 
 A track that publishes onto a ZeroMQ socket and a small Flask-based server that subscribes to messages and updates a javascript-based view using vis.js
 
+
+### <a name="badges"></a> shields io badges for workflows
+
+A track that publishes onto a ZeroMQ socket and a small Flask-based server that subscribes to messages and updates a javascript-based view using vis.js
 

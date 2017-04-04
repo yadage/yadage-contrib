@@ -22,11 +22,10 @@ def cli(workdir, identifier):
 	socket = ctx.socket(zmq.PUB)
 	socket.connect('ipc://backend.sock')
 
-
 	with steering_ctx(
-		workdir, 'madgraph_delphes.yml',
-		loadtoplevel = 'from-github/phenochain',
-		initdata = {'nevents': 100},
+		workdir, 'workflow.yml',
+		loadtoplevel = 'from-github/testing/dynamic_glob',
+		initdata = {'sourcefile': 'https://github.com/lukasheinrich/yadage-workflows/raw/master/testing/dynamic_glob/inputs/three_files.zip'},
 		updateinterval = 5,
 		loginterval = 5,
 		backend = setupbackend_fromstring('multiproc:auto')	) as ys:

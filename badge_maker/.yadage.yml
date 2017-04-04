@@ -1,0 +1,5 @@
+toplevel: from-github/phenochain
+workflow: madgraph_delphes.yml
+outputs: delphes/output.lhco,delphes/output.root
+pars:
+  nevents: 100
