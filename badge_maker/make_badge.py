@@ -12,7 +12,7 @@ def command(settingsfile,name,url):
     data['pars'] = json.dumps(data['pars'])
     
 
-    print '[![Yadage Workflow](https://img.shields.io/badge/run_yadage-{name}-4187AD.svg)]({url}?{query})'.format(
+    print '[![yadage workflow](https://img.shields.io/badge/run_yadage-{name}-4187AD.svg)]({url}?{query})'.format(
         name = name,
         url = url,
         query = urllib.urlencode(data)
