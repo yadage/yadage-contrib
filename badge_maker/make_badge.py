@@ -6,7 +6,7 @@ import click
 @click.command()
 @click.argument('name')
 @click.option('-f','--settingsfile', default = '.yadage.yml')
-@click.option('-u','--url', default = 'http://yadage.cern.ch/submitl')
+@click.option('-u','--url', default = 'http://yadage.cern.ch/submit')
 def command(settingsfile,name,url):
     data = yaml.load(open(settingsfile))
     data['pars'] = json.dumps(data['pars'])
