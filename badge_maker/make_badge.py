@@ -9,7 +9,7 @@ import click
 @click.option('-u','--url', default = 'http://yadage.cern.ch/submit')
 def command(settingsfile,name,url):
     data = yaml.load(open(settingsfile))
-    data['pars'] = json.dumps(data['pars'])
+    data['pars'] = json.dumps(data.get('pars',{}))
     
 
     print '[![yadage workflow](https://img.shields.io/badge/run_yadage-{name}-4187AD.svg)]({url}?{query})'.format(
