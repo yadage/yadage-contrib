@@ -24,6 +24,7 @@ In the
 * [ZeroMQ Tracker/Socket.IO Server](#zmq)
 * [shields.io markdown badges](#badges)
 * [Kubernetes Backend](#kubebackend)
+* [Mounted Posix State](#mountedstate)
 
 ### <a name="zmq"></a>  ZeroMQ Tracker and socket.io server
 
@@ -38,3 +39,7 @@ A track that publishes onto a ZeroMQ socket and a small Flask-based server that 
 ### <a name="kubebackend"></a> Kubernetes Backend
 
 An initial stab at an Kubernetes Packtivity Backend
+
+### <a name="mountedstate"></a> Mounted Posix State
+
+An initial stab at an state representation that comes with mount specifications (e.g for different volume drivers to be used with the kubernetes backend)
