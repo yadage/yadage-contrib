@@ -5,7 +5,7 @@ import shutil
 import json
 import logging
 import checksumdir
-
+import yaml
 import packtivity.utils as utils
 log = logging.getLogger(__name__)
 
@@ -15,8 +15,8 @@ class MountedFSState(object):
     '''
     def __init__(self,readwrite = None,readonly = None, dependencies = None, identifier = 'unidentified_state', mountspec = None):
         self._identifier = identifier
-        self.readwrite = list(map(os.path.realpath,readwrite) if readwrite else  [])
-        self.readonly  = list(map(os.path.realpath,readonly) if readonly else  [])
+        self.readwrite = list(readwrite if readwrite else  [])
+        self.readonly  = list(readonly if readonly else  [])
         self.dependencies = dependencies or []
         self.mountspec = mountspec
 
@@ -138,4 +138,7 @@ class MountedFSProvider(object):
         return cls(MountedFSState.fromJSON(jsondata['mountspec'],jsondata['base_state']), nest = jsondata['nest'])
 
 def setup_provider(dataarg,dataopts):
-    return MountedFSProvider({}, MountedFSState([os.path.realpath(dataarg)]))
+    mountspec = dataopts.get('mountspec',None)
+    if mountspec:
+        mountspec = yaml.load(open(mountspec))
+    return MountedFSProvider(mountspec, MountedFSState([os.path.join('/',dataarg)]))
