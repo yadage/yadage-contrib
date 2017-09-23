@@ -45,7 +45,7 @@ class KubeBackend(object):
         return None
 
     def submit(self, spec, parameters, state, metadata = None):
-        job = build_job(spec['process'], parameters, self.config)
+        job = build_job(spec['process'], parameters, state, self.config)
 
         image   = spec['environment']['image']
         tag     = spec['environment']['imagetag']
@@ -99,13 +99,13 @@ def state_binds(state):
 
     for i,path in enumerate(state.readwrite + state.readonly):
         container_mounts.append({
-            "name": "cephfs",
+            "name": "packtivitystate",
             "mountPath": path,
             "subPath": path.lstrip('/')
         })
 
     volumes.append({
-        "name": "cephfs".format(i),
+        "name": "packtivitystate",
     })
     volumes[0].update(state.mountspec)
     return container_mounts, volumes    
