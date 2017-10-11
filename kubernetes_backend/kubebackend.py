@@ -2,6 +2,7 @@ from kubernetes import client,config
 from packtivity.asyncbackends import PacktivityProxyBase
 from packtivity.syncbackends import packconfig, build_job, publish
 from packtivity.statecontexts import load_state
+from packtivity import prepublish_default
 import logging
 import uuid
 import os
@@ -62,6 +63,7 @@ class KubeBackend(object):
             spec = jobspec['spec']
         )
 
+        log.info(thejob)
         client.BatchV1Api().create_namespaced_job('default',thejob)                                                               
 
         log.info('submitted job: %s', jobid)
@@ -73,9 +75,8 @@ class KubeBackend(object):
         )
 
     def result(self, resultproxy):
-        return publish(
-            resultproxy.spec['publisher'],
-            resultproxy.pars, resultproxy.state, self.config
+        return prepublish_default(
+            resultproxy.spec,resultproxy.pars, resultproxy.state
         )
 
     def ready(self, resultproxy):
@@ -94,17 +95,19 @@ def state_binds(state):
     container_mounts = []
     volumes = []
 
+    log.info('mountspec: %s', state.mountspec)
+
     for i,path in enumerate(state.readwrite + state.readonly):
         container_mounts.append({
-            "name": "state{}".format(i),
-            "mountPath": path
+            "name": "cephfs",
+            "mountPath": path,
+            "subPath": path.lstrip('/')
         })
-        volumes.append({
-            "name": "state{}".format(i),
-            "hostPath": {
-                "path": path
-            }
-        })
+
+    volumes.append({
+        "name": "cephfs".format(i),
+    })
+    volumes[0].update(state.mountspec)
     return container_mounts, volumes    
 
 
